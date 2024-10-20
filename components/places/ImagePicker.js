@@ -53,7 +53,7 @@ function ImagePicker({ imagePickHandler }) {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.imagePreview}>
         <ImagePreview />
       </View>
@@ -63,10 +63,14 @@ function ImagePicker({ imagePickHandler }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginBottom: 10,
+  },
   imagePreview: {
     width: "100%",
     height: 200,
-    marginVertical: 8,
+    marginBottom: 8,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.primary100,

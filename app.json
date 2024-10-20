@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FavouritePlacesApp",
-    "slug": "FavouritePlacesApp",
+    "name": "PlaceMate",
+    "slug": "PlaceMate",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,7 +12,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app needs access to your camera to take photos.",
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to select photos."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -20,11 +24,16 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION",
-        "INTERNET"
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.INTERNET",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
       ],
-      "useCleartextTraffic": true
+      "useCleartextTraffic": true,
+      "package": "com.omkumar.PlaceMate"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -33,9 +42,14 @@
       [
         "expo-image-picker",
         {
-          "cameraPermission": "The app needs access to camera"
+          "cameraPermission": "The app needs access to your camera to take pictures."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "1db9b5ad-9b40-4093-b490-7e94fa0c25db"
+      }
+    }
   }
 }

@@ -14,7 +14,7 @@ import axios from "axios";
 function LocationPicker({ locationPickHandler }) {
   const [locationPermissionInfo, requestPermission] =
     useForegroundPermissions();
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState(location);
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -33,25 +33,26 @@ function LocationPicker({ locationPickHandler }) {
     const getAddressName = async () => {
       if (location) {
         console.log(location);
-        // const response = await axios.get(
-        //   `https://nominatim.openstreetmap.org/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json`,
-        //   {
-        //     headers: {
-        //       "Content-Type": "application/x-www-form-urlencoded",
-        //       Accept: "application/json",
-        //     },
-        //   }
-        // );
+        try {
+          const response = await axios.get(
+            `https://nominatim.openstreetmap.org/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json`
+          );
 
-        // const addressName = response.data.display_name;
+          const addressName = response.data.display_name;
 
-        // Call the location pick handler with the address
-        locationPickHandler({ ...location, address: "Something" });
+          // Call the location pick handler with the address
+          setLocation({ ...location, address: addressName });
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLocation({ ...location, address: "Something" });
+          locationPickHandler(location);
+        }
       }
     };
 
     getAddressName();
-  }, [location]);
+  }, [location?.latitude, location?.longitude]);
 
   const verifyPermission = async () => {
     if (locationPermissionInfo.status === PermissionStatus.UNDETERMINED) {
@@ -83,11 +84,11 @@ function LocationPicker({ locationPickHandler }) {
   };
 
   const pickOnMapHandler = () => {
-    navigation.navigate("Map");
+    navigation.navigate("Map", { location, mode: "add" });
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.mapPreview}>
         <MapView
           style={styles.mapview}
@@ -111,7 +112,7 @@ function LocationPicker({ locationPickHandler }) {
                 latitude: location.latitude,
                 longitude: location.longitude,
               }}
-              title="You are here"
+              title={location.address}
             />
           )}
         </MapView>
@@ -125,10 +126,14 @@ function LocationPicker({ locationPickHandler }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginBottom: 10,
+  },
   mapPreview: {
     width: "100%",
     height: 200,
-    marginVertical: 8,
+    marginBottom: 8,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.primary100,
@@ -139,7 +144,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    marginBottom: 10,
   },
   mapview: {
     width: "100%",
