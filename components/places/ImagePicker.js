@@ -16,14 +16,12 @@ function ImagePicker({ imagePickHandler }) {
   }, [pickedImage]);
 
   const verifyPermission = async () => {
-    if (cameraPermissionInfo.status === PermissionStatus.UNDETERMINED) {
+    if (
+      cameraPermissionInfo.status === PermissionStatus.UNDETERMINED ||
+      cameraPermissionInfo.status === PermissionStatus.DENIED
+    ) {
       const permissionResponse = await requestPermission();
       return permissionResponse.granted;
-    }
-
-    if (cameraPermissionInfo.status === PermissionStatus.DENIED) {
-      Alert.alert("Cannot continue", "You need to grant camera permission.");
-      return false;
     }
 
     return true;
@@ -33,6 +31,7 @@ function ImagePicker({ imagePickHandler }) {
     const hasPermission = await verifyPermission();
 
     if (!hasPermission) {
+      Alert.alert("Cannot continue", "Permission to access camera is denied.");
       return;
     }
 

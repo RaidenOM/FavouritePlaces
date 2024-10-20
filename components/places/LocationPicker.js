@@ -55,17 +55,13 @@ function LocationPicker({ locationPickHandler }) {
   }, [location?.latitude, location?.longitude, location?.address]);
 
   const verifyPermission = async () => {
-    if (locationPermissionInfo.status === PermissionStatus.UNDETERMINED) {
+    if (
+      locationPermissionInfo.status === PermissionStatus.UNDETERMINED ||
+      locationPermissionInfo.status === PermissionStatus.DENIED
+    ) {
       const permissionResponse = await requestPermission();
       return permissionResponse.granted;
     }
-
-    if (locationPermissionInfo.status === PermissionStatus.DENIED) {
-      const permissionResponse = await requestPermission();
-      Alert.alert("Cannot continue", "You need to grant location permission.");
-      return false;
-    }
-
     return true;
   };
 
@@ -73,6 +69,10 @@ function LocationPicker({ locationPickHandler }) {
     const hasPermission = await verifyPermission();
 
     if (!hasPermission) {
+      Alert.alert(
+        "Cannot continue",
+        "Permission to access location is denied."
+      );
       return;
     }
 
