@@ -52,7 +52,7 @@ function LocationPicker({ locationPickHandler }) {
     };
 
     getAddressName();
-  }, [location?.latitude, location?.longitude]);
+  }, [location?.latitude, location?.longitude, location?.address]);
 
   const verifyPermission = async () => {
     if (locationPermissionInfo.status === PermissionStatus.UNDETERMINED) {
