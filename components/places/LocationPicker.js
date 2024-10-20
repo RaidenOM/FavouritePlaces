@@ -41,7 +41,7 @@ function LocationPicker({ locationPickHandler }) {
           const addressName = response.data.display_name;
 
           // Call the location pick handler with the address
-          setLocation({ ...location, address: addressName });
+          setLocation({ ...location, address: addressName || "Something" });
         } catch (error) {
           console.log(error);
         } finally {
@@ -61,6 +61,7 @@ function LocationPicker({ locationPickHandler }) {
     }
 
     if (locationPermissionInfo.status === PermissionStatus.DENIED) {
+      const permissionResponse = await requestPermission();
       Alert.alert("Cannot continue", "You need to grant location permission.");
       return false;
     }
